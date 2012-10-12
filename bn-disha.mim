@@ -19,13 +19,15 @@
 ;; Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 ;; Boston, MA 02110-1301, USA.
 
-(input-method bn disha (version "0.4.6"))
+(input-method bn disha (version "1.6.1"))
 
 (description "Bengali input method based on probhat layout.
 
 Visual Based Bengali Keymap Layout created by Sayak Sarkar and proposed by Ankur Group (www.ankur.org.in) as part of Google Summer of Code, 2012. 
 
-Link to proposal: http://www.google-melange.com/gsoc/proposal/review/google/gsoc2012/sayak_sarkar/6001
+Link to Project Page: http://sayak-sarkar.github.com/Disha/
+
+Link to Proposal: http://www.google-melange.com/gsoc/proposal/review/google/gsoc2012/sayak_sarkar/6001
 
 Key summary:
 
@@ -42,7 +44,7 @@ E.g. কো = [+k+a
 Author: Sayak Sarkar <sayak.bugsmith@gmail.com>
 Mentor: Runa Bhattacharjee <runabh@gmail.com>")
 
-(title "দিশা")
+(title "দি")
 
 (map
  (dependent
@@ -165,34 +167,23 @@ Mentor: Runa Bhattacharjee <runabh@gmail.com>")
   ((G-!) "৴")				; 09F4
   ((G-@) "৵")				; 09F5
   ((G-#) "৶")				; 09F6
+  ((G-~) "₹")
   ((G-%) "৸")				; 09F8
   ((G-^) "৹")				; 09F9
   ((G-?) "৻")				; 09FB
   ((G-\\) ""))                          ; ZWNJ
-
- (jo-fala
-  ((G-z) "্য")
- )
-
- (conjoint
-  ((G-s) "ক্ষ")
-  ((G-g) "জ্ঞ")
-  ((G-f) "ক্ত")
- )
 
  (special
   ("." ?।)                              ; 09F7
   ("!" ?!)
   ("@" ?@)
   ("#" ?#)
-  ("$" ?₹)                              
+  ("$" ?৳)
   ("%" ?%)
   ("^" ?^)
   ("(" ?()
   (")" ?))
   ("_" ?_)
-  ("-" ?‌)
-  ("+" ?‍)
   ("=" ?=)
   (":" ?:)
   (";" ?\;)
@@ -215,10 +206,11 @@ Mentor: Runa Bhattacharjee <runabh@gmail.com>")
   (independent)
   (dependent)
   (AltGr)
-  (halant)
-  (conjoint)
-  (jo-fala)
   (a-kar)
+
+  (halant    (cond
+	      ((| (= @-2 0x09BF) (= @-2 0x09C7) (= @-2 0x09C8))
+	       (shift pre-vowel))))
 
   (backspace (set m @-1)                ; M is the previous character (possibly pre-vowel)
 	     (set b @-2)                ; B is the previous consonant (possibly consonant)
@@ -231,7 +223,7 @@ Mentor: Runa Bhattacharjee <runabh@gmail.com>")
 					; check whether M is a pre-vowel
 	       (delete @-1)             ; delete the previous consonant
 	       (cond
-		((= @-1 0x09CD)         ; check if the previous character is a halant, i.e. if the previous characters were conjoint
+		((= @-1 0x09CD)         ; check if the previous character is a halant, i.e. if the previous characters were conjoined
 		 (delete @-2))))        ; delete halant as well as the previous consonant
 	      
 
@@ -240,9 +232,8 @@ Mentor: Runa Bhattacharjee <runabh@gmail.com>")
 	       0x09C7                   ; insert ে
 	       (commit))))
 
-  (pre-vowel (set flag 1)               ; set the pre-vowel flag to indicate that the pre-vowel is has not yet beenprocessed
+  (pre-vowel (set flag 1)               ; set the pre-vowel flag to indicate that the pre-vowel is has not yet been processed
 	     (shift pre-vowel)))
-
 
  (pre-vowel  
   (consonant (cond
@@ -266,22 +257,6 @@ Mentor: Runa Bhattacharjee <runabh@gmail.com>")
 	       (move @>)                ; move to the end
 	       (set flag 0)             ; reset the flag to indicate that the pre-vowel has been processed.
 	       (commit))))              ; commit the processed pre-vowel consonant join
-
-  (jo-fala   (set j @-1)                ; J is 09AF i.e. য
-	     (set k @-2)                ; K is the halant
-	     (set l @-3)                ; L is the pre-vowel
-	     (delete @-3)               ; delete the last three characters
-	     (insert k)                 ; insert the halant
-	     (insert j)                 ; insert 09AF i.e. য
-	     (insert l)                 ; insert the pre-vowel
-	     (commit))                  ; commit the jo-fala joint.
-
-  (conjoint  (move @-3)                 ; move to before the pre-vowel
-	     (set pre @+0)              ; Pre is the pre-vowel
-	     (delete @+1)               ; delete the pre-vowel
-	     (move @>)                  ; move to the last position
-	     (insert pre)               ; insert the pre-vowel
-	     (commit))                  ; commit the pre-vowel and conjoint characters joint
 
   (halant    (cond
 	      ((| (= @-2 0x09BF) (= @-2 0x09C7) (= @-2 0x09C8))
@@ -320,7 +295,7 @@ Mentor: Runa Bhattacharjee <runabh@gmail.com>")
 		((= flag 0)             ; check if the pre-vowel has been processed
 		 (delete @-1)           ; delete the previous consonant
 		 (cond
-		  ((= @-1 0x09CD)       ; check if the previous character is a halant, i.e. if the previous characters were conjoint
+		  ((= @-1 0x09CD)       ; check if the previous character is a halant, i.e. if the previous characters were conjoined
 		   (delete @-2))))))    ; delete halant as well as the previous consonant
 
 	      ((& (| (= m 0x09CB) (= m 0x09CC)) (> b 0)) 
