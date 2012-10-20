@@ -1,3 +1,27 @@
+Version 1.0.0
+=============
+
+First Major Version Of BN-DISHA Released On The 20th Day Of August 2012.
+
+Version 0.4.6
+=============
+
+Fixed Logical Bug with A-kar state.
+
+Updated System Icon.
+
+Special Symbol Joins Fixed.
+
+Conjoined Character Mappings Removed.
+
+Half Pre-Vowel entry issue Resolved.
+
+Combinational Character issue Resolved.
+
+Backspacing Issue for Conjoined Characters Resolved.
+
+Init State for Halant Updated.
+
 Version 0.4.5
 =============
 
